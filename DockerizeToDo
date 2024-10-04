@@ -1,0 +1,19 @@
+1. Create a DockerFile to containerize app.js
+2. From a lightweight node.js alpine version
+3. set a working dir
+4. declare ports for exposing ports (in docker-compose.yml)
+5. copy package*.json to workdir (as it's needed for the npm install command - to install dependencies)
+6. copy .env.example to .env file (for use by docker-compose)
+7. run commands npm install
+8. declare a mount volume ? (not needed, but good for practice)
+9. copy disk dir to virtual docker workdir
+10. CMD directive - run node app e.g. npm start server.js etc.
+
+11. Setup Docker-compose.yml file
+12. auto network exists; add services
+	-- app.js (specify build command instead of image command)
+	-- mariaDB.js (specify image command)
+13. set depends_on on app.js to watch for maria_db container
+14. set healthcheck for mariadb
+15. Set volumes, port, environment vars using env file
+16. run docker compose up

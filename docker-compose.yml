@@ -1,0 +1,44 @@
+services:
+
+  my-node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: ./.env.example
+        required: true
+      - path: ./.env
+        required: false
+    depends_on:
+      - "mariadb"
+
+
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    env_file:
+      - path: ./.env.example
+        required: true
+      - path: ./.env
+        required: false
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+            config:
+                # If you get an error saying "Error response from daemon: could not find an available, non-overlapping IPv4 address pool among the defaults to assign to the network"
+                # Run ifconfig and find a range unused on your machine.
+                # The reason for this error is that docker will try to use VPN range by default, and conflict with openfortivpn.
+                # - see https://docs.storagemadeeasy.com/appliance/docker_networking
+                - subnet: 172.27.0.0/16
